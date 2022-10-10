@@ -1,8 +1,8 @@
-# @amap/layer-3dtiles
-[![npm (tag)](https://img.shields.io/npm/v/@amap/layer-3dtiles)](https://www.npmjs.org/package/@amap/layer-3dtiles)
-[![NPM downloads](http://img.shields.io/npm/dm/@amap/layer-3dtiles.svg)](https://npmjs.org/package/@amap/layer-3dtiles)
-![JS gzip size](http://img.badgesize.io/https://unpkg.com/@amap/layer-3dtiles/dist/index.js?compression=gzip&label=gzip%20size:%20JS)
-[![NPM](https://img.shields.io/npm/l/@amap/layer-3dtiles)](https://github.com/AMap-Web/layer-3dtiles)
+# @vuemap/layer-3dtiles
+[![npm (tag)](https://img.shields.io/npm/v/@vuemap/layer-3dtiles)](https://www.npmjs.org/package/@vuemap/layer-3dtiles)
+[![NPM downloads](http://img.shields.io/npm/dm/@vuemap/layer-3dtiles.svg)](https://npmjs.org/package/@vuemap/layer-3dtiles)
+![JS gzip size](http://img.badgesize.io/https://unpkg.com/@vuemap/layer-3dtiles/dist/index.js?compression=gzip&label=gzip%20size:%20JS)
+[![NPM](https://img.shields.io/npm/l/@vuemap/layer-3dtiles)](https://github.com/AMap-Web/layer-3dtiles)
 [![star](https://badgen.net/github/stars/amap-web/layer-3dtiles)](https://github.com/AMap-Web/layer-3dtiles)
 
 ### 简介
@@ -32,13 +32,13 @@ CDN加载需要先加载高德地图JS、threejs的库和`@amap/three-layer`，�
 <!--加载three-layer插件 -->
 <script src="https://cdn.jsdelivr.net/npm/@amap/three-layer/dist/index.js"></script>
 <!--加载layer-3dtiles插件 -->
-<script src="https://cdn.jsdelivr.net/npm/@amap/layer-3dtiles/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@vuemap/layer-3dtiles/dist/index.js"></script>
 ```
 
 #### npm加载
 npm加载可以直接使用安装库
 ```shell
-npm install @amap/layer-3dtiles @amap/three-layer
+npm install @vuemap/layer-3dtiles @amap/three-layer
 ```
 
 ### 使用示例
@@ -51,7 +51,7 @@ npm install @amap/layer-3dtiles @amap/three-layer
 <script src="https://cdn.jsdelivr.net/npm/three@0.143/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@amap/three-layer/dist/index.js"></script>
 <!--加载layer-3dtiles插件 -->
-<script src="https://cdn.jsdelivr.net/npm/@amap/layer-3dtiles/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@vuemap/layer-3dtiles/dist/index.js"></script>
 <script type="text/javascript">
   const map = new AMap.Map('app', {
       center: [116.405242513021,39.909402940539],
@@ -86,7 +86,7 @@ npm install @amap/layer-3dtiles @amap/three-layer
 ```js
 import {AmbientLight} from 'three'
 import {ThreeLayer} from '@amap/three-layer'
-import {Layer3DTiles} from '@amap/layer-3dtiles'
+import {Layer3DTiles} from '@vuemap/layer-3dtiles'
 const map = new AMap.Map('app', {
   center: [120,31],
   zoom: 14,

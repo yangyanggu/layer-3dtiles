@@ -32,14 +32,17 @@
       <button onclick="create()">创建tiles</button>
     </div>
     <script type="text/javascript">
-      // const center = [116.1525,39.906]
-      const center = [113.067878363716,22.644367393664]
+      const center = [116.404987, 39.90946]
+      // const center = [113.067878363716,22.644367393664]
       const map = new AMap.Map('app', {
         center: center,
         zoom: 14,
         viewMode: '3D',
         showBuildingBlock: false,
         pitch: 35
+      })
+      map.on('click',(e) => {
+        console.log('点击的经纬度: ', e.lnglat.toArray())
       })
       map.add(new AMap.TileLayer.Satellite())
       const layer = new AMap.ThreeLayer(map)
@@ -60,9 +63,9 @@
       }
       function create(){
         tiles = new AMap.Layer3DTiles(layer, {
-          // url: './hutong/tileset.json', // shp生成的3dtiles
+          url: './hutong/tileset.json', // shp生成的3dtiles
           // url: './tiles/tileset.json', // 倾斜摄影生成的3dtiles
-          url: 'http://localhost/bl-1/tileset.json', // 倾斜摄影生成的3dtiles
+          // url: 'http://localhost/bl-1/tileset.json', // 倾斜摄影生成的3dtiles
           position: center,
           // mouseEvent: true,
           debug: true
