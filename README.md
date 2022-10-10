@@ -8,6 +8,9 @@
 ### 简介
 本项目为高德地图的3DTilesLayer图层插件，依赖`@amap/three-layer`插件，因此如果使用npm安装时需要安装`@amap/three-layer`
 
+### 示例
+[codepen示例](https://codepen.io/yangyanggu/pen/BaxGLVZ)
+
 ### 模型导出时注意事项
 * 当使用shp文件生成3dtiles时，参考坐标系需要根据shp文件的坐标系来设定，正常shp文件使用EPSG:4326坐标系，也就是WGS84
 * 使用倾斜摄影生成3dtiles时，需要在导出时将原点设置为0 0 0
