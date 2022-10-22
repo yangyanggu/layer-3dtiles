@@ -1,5 +1,5 @@
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
+import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader.js";
 import {Vector2, Raycaster} from "three";
 import {bind} from 'lodash-es';
 import BaseEvent from '../event'
