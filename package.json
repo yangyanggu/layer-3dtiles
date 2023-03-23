@@ -1,6 +1,6 @@
 {
   "name": "@vuemap/layer-3dtiles",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "高德地图3DTiles加载插件",
   "keywords": [
     "amap",
@@ -10,15 +10,13 @@
   ],
   "exports": {
     ".": {
-      "require": "./dist/index-cjs.js",
-      "import": "./dist/index-es.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
     },
-    "./es": "./dist/index-es.js",
-    "./lib": "./dist/index-cjs.js",
     "./*": "./*"
   },
-  "main": "dist/index-cjs.js",
-  "module": "dist/index-es.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "unpkg": "dist/index.js",
   "jsdelivr": "dist/index.js",
   "packageManager": "pnpm@7.9.4",
