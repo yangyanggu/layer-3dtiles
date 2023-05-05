@@ -8,6 +8,8 @@
 ### 简介
 本项目为高德地图的3DTilesLayer图层插件，依赖`@amap/three-layer`插件，因此如果使用npm安装时需要安装`@amap/three-layer`
 
+> 当前坐标只支持box，不支持region和sphere
+
 ### 示例
 [codepen示例](https://codepen.io/yangyanggu/pen/BaxGLVZ)
 
