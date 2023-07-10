@@ -1,17 +1,16 @@
 import { TilesRenderer } from '3d-tiles-renderer'
-import {Matrix4, Vector3, Box3, Sphere} from 'three'
-const vecX = new Vector3();
-const vecY = new Vector3();
-const vecZ = new Vector3();
+import { TileBoundingVolume } from '3d-tiles-renderer/src/three/math/TileBoundingVolume.js';
+import {Matrix4} from "three";
 export class LayerTilesRenderer extends TilesRenderer {
 
-  preprocessNode( tile, parentTile, tileSetDir ) {
+  preprocessNode( tile, tileSetDir, parentTile ) {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    super.preprocessNode( tile, parentTile, tileSetDir );
+    super.preprocessNode( tile, tileSetDir, parentTile );
 
     const transform = new Matrix4();
+
     if ( tile.transform ) {
 
       if(!parentTile){
@@ -32,12 +31,17 @@ export class LayerTilesRenderer extends TilesRenderer {
         tile.transform[ 14 ] = 0
         tile.transform[ 15 ] = 1.0
       }
+
       const transformArr = tile.transform;
       for ( let i = 0; i < 16; i ++ ) {
 
         transform.elements[ i ] = transformArr[ i ];
 
       }
+    } else {
+
+      transform.identity();
+
     }
 
     if ( parentTile ) {
@@ -45,86 +49,22 @@ export class LayerTilesRenderer extends TilesRenderer {
       transform.premultiply( parentTile.cached.transform );
 
     }
+
     const transformInverse = new Matrix4().copy( transform ).invert();
+    const boundingVolume = new TileBoundingVolume();
 
-    let box: null | Box3 = null;
-    let boxTransform: null | Matrix4 = null;
-    let boxTransformInverse: null | Matrix4 = null;
-    if ( 'box' in tile.boundingVolume ) {
-
-      const data = tile.boundingVolume.box;
-      box = new Box3();
-      boxTransform = new Matrix4();
-      boxTransformInverse = new Matrix4();
-
-      // get the extents of the bounds in each axis
-      vecX.set( data[ 3 ], data[ 4 ], data[ 5 ] );
-      vecY.set( data[ 6 ], data[ 7 ], data[ 8 ] );
-      vecZ.set( data[ 9 ], data[ 10 ], data[ 11 ] );
-
-      const scaleX = vecX.length();
-      const scaleY = vecY.length();
-      const scaleZ = vecZ.length();
-
-      vecX.normalize();
-      vecY.normalize();
-      vecZ.normalize();
-
-      // handle the case where the box has a dimension of 0 in one axis
-      if ( scaleX === 0 ) {
-
-        vecX.crossVectors( vecY, vecZ );
-
-      }
-
-      if ( scaleY === 0 ) {
-
-        vecY.crossVectors( vecX, vecZ );
-
-      }
-
-      if ( scaleZ === 0 ) {
-
-        vecZ.crossVectors( vecX, vecY );
-
-      }
-
-      // create the oriented frame that the box exists in
-      boxTransform.set(
-        vecX.x, vecY.x, vecZ.x, data[ 0 ],
-        vecX.y, vecY.y, vecZ.y, data[ 1 ],
-        vecX.z, vecY.z, vecZ.z, data[ 2 ],
-        0, 0, 0, 1
-      );
-      boxTransform.premultiply( transform );
-      boxTransformInverse.copy( boxTransform ).invert();
-
-      // scale the box by the extents
-      box.min.set( - scaleX, - scaleY, - scaleZ );
-      box.max.set( scaleX, scaleY, scaleZ );
-
-    }
-
-    let sphere: null | Sphere = null;
     if ( 'sphere' in tile.boundingVolume ) {
 
-      const data = tile.boundingVolume.sphere;
-      sphere = new Sphere();
-      sphere.center.set( data[ 0 ], data[ 1 ], data[ 2 ] );
-      sphere.radius = data[ 3 ];
-      sphere.applyMatrix4( transform );
-
-    } else if ( 'box' in tile.boundingVolume ) {
-
-      const data = tile.boundingVolume.box;
-      sphere = new Sphere();
-      box?.getBoundingSphere( sphere );
-      sphere.center.set( data[ 0 ], data[ 1 ], data[ 2 ] );
-      sphere.applyMatrix4( transform );
+      console.warn( 'ThreeTilesRenderer: sphere bounding volume not supported.' );
 
     }
 
-    const region = null;
+    if ( 'box' in tile.boundingVolume ) {
+
+      boundingVolume.setObbData( tile.boundingVolume.box, transform );
+
+    }
+
     if ( 'region' in tile.boundingVolume ) {
 
       console.warn( 'ThreeTilesRenderer: region bounding volume not supported.' );
@@ -140,11 +80,7 @@ export class LayerTilesRenderer extends TilesRenderer {
       active: false,
       inFrustum: [],
 
-      box,
-      boxTransform,
-      boxTransformInverse,
-      sphere,
-      region,
+      boundingVolume,
 
       scene: null,
       geometry: null,

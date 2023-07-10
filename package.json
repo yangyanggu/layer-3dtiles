@@ -1,6 +1,6 @@
 {
   "name": "@vuemap/layer-3dtiles",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "高德地图3DTiles加载插件",
   "keywords": [
     "amap",
@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/yangyanggu/layer-3dtiles",
   "dependencies": {
-    "3d-tiles-renderer": "^0.3.13",
+    "3d-tiles-renderer": "0.3.20",
     "three": "0.143.0",
     "lodash-es": "^4.17.21"
   },
