@@ -1,9 +1,10 @@
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader.js";
-import {Vector2, Raycaster} from "three";
+import {Vector2, Raycaster, Group, Box3, Vector3} from "three";
 import {bind} from 'lodash-es';
 import BaseEvent from '../event'
 import { LayerTilesRenderer } from './LayerTilesRenderer'
+import {gps84_To_Gcj02, convertToWGS84} from '../utils/GPSUtil'
 
 interface Vec {
   x: number
@@ -26,7 +27,7 @@ interface Options {
 class Layer3DTiles extends BaseEvent{
   layer: any // threejs的图层对象
   animationFrame = -1; //gltf动画
-  tilesRenderer?: LayerTilesRenderer
+  tilesRenderer: LayerTilesRenderer
   group: any
   statsContainer?: HTMLDivElement
   mouse: Vector2
@@ -34,6 +35,9 @@ class Layer3DTiles extends BaseEvent{
   clickMapFn: any
   mousemoveMapFn: any
   rightClickMapFn: any
+  parentGroup: Group
+  position?: number[]
+  hasResetCenter = false
 
   constructor(layer: any, options: Options) {
     super();
@@ -77,7 +81,11 @@ class Layer3DTiles extends BaseEvent{
     }
     tilesRenderer.downloadQueue.maxJobs = 6
     tilesRenderer.parseQueue.maxJobs = 6
-    this.group = tilesRenderer.group
+    const contentGroup = new Group()
+    this.parentGroup = new Group()
+    this.parentGroup.add(tilesRenderer.group)
+    contentGroup.add(this.parentGroup)
+    this.group = contentGroup
     this.layer.add( this.group );
     this.tilesRenderer = tilesRenderer
     if(options.position){
@@ -205,6 +213,7 @@ class Layer3DTiles extends BaseEvent{
     this.group.position.setX(positionConvert[0]);
     this.group.position.setY(positionConvert[1]);
     this.refresh();
+    this.position = position;
   }
 
   setRotation(rotation: Vec) {
@@ -259,7 +268,44 @@ class Layer3DTiles extends BaseEvent{
     this.animationFrame = requestAnimationFrame(() => {
       this.update();
       this.animate();
+      if(!this.hasResetCenter && this.tilesRenderer.root){
+        const box = new Box3()
+        // 重置region的中心点
+        if ( this.tilesRenderer.root && (this.tilesRenderer.root as any).boundingVolume.region ) {
+          this.tilesRenderer.getOrientedBounds( box, this.parentGroup.matrix );
+          this.parentGroup.matrix.decompose( this.parentGroup.position, this.parentGroup.quaternion, this.parentGroup.scale );
+          this.parentGroup.position.set( 0, 0, 0 );
+          this.parentGroup.quaternion.invert();
+          this.parentGroup.scale.set( 1, 1, 1 );
+        }
+        this.group.updateMatrixWorld( false );
+        // 获取中心点，将3dtiles加载的group的中心点重置，变成默认为0 0 0
+        if ( this.tilesRenderer.getBounds( box ) ) {
+          // 重置整体的坐标，转化为高德需要的投影坐标
+          this.resetPosition(box);
+          box.getCenter( this.tilesRenderer.group.position );
+          this.tilesRenderer.group.position.multiplyScalar( - 1 );
+          this.hasResetCenter = true;
+        }
+      }
     });
+  }
+
+  resetPosition(box: Box3){
+    if(!this.position){
+      // 从3dtiles盒模型中获取中心点坐标
+      const center = new Vector3();
+      box.getCenter(center);
+      // 将中心点坐标转化为经纬度和海拔
+      const result = convertToWGS84(center.x, center.y, center.z);
+      const lnglat = gps84_To_Gcj02(result.longitude, result.latitude);
+      this.setPosition(lnglat);
+      this.setTranslate({
+        x:0,
+        y:0,
+        z: result.height
+      })
+    }
   }
 
   update(){

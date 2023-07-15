@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>测试</title>
     <style type="text/css">
+      *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
       html,body,#app{
           height: 100%;
       }
@@ -63,10 +68,12 @@
       }
       function create(){
         tiles = new AMap.Layer3DTiles(layer, {
-          url: './hutong/tileset.json', // shp生成的3dtiles
+          // url: './hutong/tileset.json', // shp生成的3dtiles
           // url: './tiles/tileset.json', // 倾斜摄影生成的3dtiles
-          // url: 'http://localhost/bl-1/tileset.json', // 倾斜摄影生成的3dtiles
-          position: center,
+          // url: 'http://localhost/bl-0715/tileset.json', // 倾斜摄影生成的3dtiles
+          // url: 'http://localhost/3dtiles20230326/tileset.json', // region
+          url: 'http://localhost/region/tileset.json', // region
+          // position: center,
           // mouseEvent: true,
           debug: true
         })
@@ -75,8 +82,8 @@
           y:0,
           z:0
         })
-        tiles.setScale(1.5)
-        /*tiles.on('click', (e) => {
+        // tiles.setScale(1.5)
+        /*tiles.on('click', (e ) => {
           console.log('click: ', e)
         })
         tiles.on('mousemove', (e) => {

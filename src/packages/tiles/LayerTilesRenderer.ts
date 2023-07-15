@@ -1,96 +1,40 @@
 import { TilesRenderer } from '3d-tiles-renderer'
-import { TileBoundingVolume } from '3d-tiles-renderer/src/three/math/TileBoundingVolume.js';
-import {Matrix4} from "three";
+import {Matrix4, Vector3, Quaternion} from "three";
 export class LayerTilesRenderer extends TilesRenderer {
 
   preprocessNode( tile, tileSetDir, parentTile ) {
+
+    if ( tile.transform ) {
+
+      if ( ! parentTile ) {
+        const matrix = new Matrix4().fromArray( tile.transform );
+        const position = new Vector3();
+        const scale = new Vector3();
+        const quaternion = new Quaternion();
+        matrix.decompose(position, quaternion, scale);
+        quaternion.setFromAxisAngle( new Vector3( 0, 0, 1 ), 0 );
+        matrix.compose(position, quaternion, scale);
+        tile.transform = matrix.toArray();
+
+      }
+
+    }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     super.preprocessNode( tile, tileSetDir, parentTile );
 
-    const transform = new Matrix4();
+    /*if ( 'region' in tile.boundingVolume && ! parentTile) {
+      console.log('tile.cached.transform: ', tile.cached.transform)
+      const matrix = new Matrix4().fromArray( tile.cached.transform );
+      matrix.makeRotationAxis( new Vector3( 0, 0, 1 ), 0 );
+      tile.cached.transform = matrix.toArray();
 
-    if ( tile.transform ) {
-
-      if(!parentTile){
-        tile.transform[0] = 1
-        tile.transform[1] = 0
-        tile.transform[2] = 0
-        tile.transform[3] = 0
-        tile.transform[4] = 0
-        tile.transform[5] = 1
-        tile.transform[6] = 0
-        tile.transform[7] = 0
-        tile.transform[8] = 0
-        tile.transform[9] = 0
-        tile.transform[10] = 1
-        tile.transform[11] = 0
-        tile.transform[ 12 ] = 0
-        tile.transform[ 13 ] = 0
-        tile.transform[ 14 ] = 0
-        tile.transform[ 15 ] = 1.0
-      }
-
-      const transformArr = tile.transform;
-      for ( let i = 0; i < 16; i ++ ) {
-
-        transform.elements[ i ] = transformArr[ i ];
-
-      }
-    } else {
-
-      transform.identity();
-
-    }
-
-    if ( parentTile ) {
-
-      transform.premultiply( parentTile.cached.transform );
-
-    }
-
-    const transformInverse = new Matrix4().copy( transform ).invert();
-    const boundingVolume = new TileBoundingVolume();
-
-    if ( 'sphere' in tile.boundingVolume ) {
-
-      console.warn( 'ThreeTilesRenderer: sphere bounding volume not supported.' );
-
-    }
-
-    if ( 'box' in tile.boundingVolume ) {
-
-      boundingVolume.setObbData( tile.boundingVolume.box, transform );
-
-    }
-
-    if ( 'region' in tile.boundingVolume ) {
-
-      console.warn( 'ThreeTilesRenderer: region bounding volume not supported.' );
-
-    }
-
-    tile.cached = {
-
-      loadIndex: 0,
-      transform,
-      transformInverse,
-
-      active: false,
-      inFrustum: [],
-
-      boundingVolume,
-
-      scene: null,
-      geometry: null,
-      material: null,
-
-    };
+    }*/
 
   }
 
-  dispose() {
+  /*dispose() {
 
     super.dispose();
     const _this = this as any
@@ -139,5 +83,5 @@ export class LayerTilesRenderer extends TilesRenderer {
     delete group.tilesRenderer;
     group.remove( ...group.children );
 
-  }
+  }*/
 }
