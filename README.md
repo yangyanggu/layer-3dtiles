@@ -6,17 +6,17 @@
 [![star](https://badgen.net/github/stars/amap-web/layer-3dtiles)](https://github.com/AMap-Web/layer-3dtiles)
 
 ### 简介
-本项目为高德地图的3DTilesLayer图层插件，依赖`@amap/three-layer`插件，因此如果使用npm安装时需要安装`@amap/three-layer`
+本项目为高德地图的3DTilesLayer图层插件，依赖`@vuemap/three-layer`插件，因此如果使用npm安装时需要安装`@vuemap/three-layer`
 
-> 当前坐标只支持box，不支持region和sphere
+> 当前坐标只支持box、region, 不支持sphere
+> 从0.0.7版本(当前为beta版)开始可以初始化可以不传position，不传时将默认从3dtiles数据中获取中心点和海拔
 
 ### 示例
 [codepen示例](https://codepen.io/yangyanggu/pen/BaxGLVZ)
 
 ### 模型导出时注意事项
 * 当使用shp文件生成3dtiles时，参考坐标系需要根据shp文件的坐标系来设定，正常shp文件使用EPSG:4326坐标系，也就是WGS84
-* 使用倾斜摄影生成3dtiles时，需要在导出时将原点设置为0 0 0
-* 只支持box包围
+* 只支持box、region包围
 
 ### 开发注意事项
 * 当加载3dtiles，需要关闭浏览器的开发者工具，不然在销毁3dtiles图层时会有部分显存无法释放
@@ -25,7 +25,7 @@
 当前项目支持CDN加载和npm加载两种方式。
 
 #### CDN加载
-CDN加载需要先加载高德地图JS、threejs的库和`@amap/three-layer`，代码如下
+CDN加载需要先加载高德地图JS、threejs的库和`@vuemap/three-layer`，代码如下
 ```js
 <!--加载高德地图JS 2.0 -->
 <script src = 'https://webapi.amap.com/maps?v=2.0&key=YOUR_KEY'></script>
@@ -36,7 +36,7 @@ CDN加载需要先加载高德地图JS、threejs的库和`@amap/three-layer`，�
 <!--加载threejs的GLTFLoader -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.143/examples/js/loaders/GLTFLoader.js"></script>
 <!--加载three-layer插件 -->
-<script src="https://cdn.jsdelivr.net/npm/@amap/three-layer/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@vuemap/three-layer/dist/index.js"></script>
 <!--加载layer-3dtiles插件 -->
 <script src="https://cdn.jsdelivr.net/npm/@vuemap/layer-3dtiles/dist/index.js"></script>
 ```
@@ -44,7 +44,7 @@ CDN加载需要先加载高德地图JS、threejs的库和`@amap/three-layer`，�
 #### npm加载
 npm加载可以直接使用安装库
 ```shell
-npm install @vuemap/layer-3dtiles @amap/three-layer
+npm install @vuemap/layer-3dtiles @vuemap/three-layer
 ```
 
 ### 使用示例
@@ -55,7 +55,7 @@ npm install @vuemap/layer-3dtiles @amap/three-layer
 <script src="https://cdn.jsdelivr.net/npm/three@0.143/build/three.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.143/examples/js/loaders/DRACOLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.143/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@amap/three-layer/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@vuemap/three-layer/dist/index.js"></script>
 <!--加载layer-3dtiles插件 -->
 <script src="https://cdn.jsdelivr.net/npm/@vuemap/layer-3dtiles/dist/index.js"></script>
 <script type="text/javascript">
@@ -91,7 +91,7 @@ npm install @vuemap/layer-3dtiles @amap/three-layer
 #### npm方式
 ```js
 import {AmbientLight} from 'three'
-import {ThreeLayer} from '@amap/three-layer'
+import {ThreeLayer} from '@vuemap/three-layer'
 import {Layer3DTiles} from '@vuemap/layer-3dtiles'
 const map = new AMap.Map('app', {
   center: [120,31],
@@ -130,17 +130,17 @@ layer.on('complete', () => {
 layer: ThreeLayer实例对象<br/>
 options: Layer3DTiles初始化参数，参数内容如下：
 
-| 属性名              | 属性类型                                     | 属性描述                                                                                                  |
-|------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| url              | String                                   | 模型加载地址                                                                                                |
-| position         | [number,number]                          | 3dtiles加载的经纬度位置                                                                                       |
-| scale            | Number，{x:Number, y: Number, z: Number}  | 设置缩放比例                                                                                                |
-| rotation         | {x:Number, y: Number, z: Number}         | 旋转模型                                                                                                  |
-| translate        | {x:Number, y: Number, z: Number}         | 模型偏移设置                                                                                                |
-| dracoDecoderPath | String                                   | DRACOLoader 的decoder路径，默认使用CDN路径，默认：https://cdn.jsdelivr.net/npm/three@0.143/examples/js/libs/draco/  | 
-| fetchOptions     | Object                                   | 使用fetch下载文件的参数                                                                                        |
-| mouseEvent       | Boolean                                  | 是否开启事件,默认false                                                                                        |
-| debug            | Boolean                                  | 是否开启debug，开启后将会在页面最顶部显示当前模型处理情况， 默认 false                                                             |
+| 属性名              | 属性类型                                     | 属性描述                                                                                                 |
+|------------------|------------------------------------------|------------------------------------------------------------------------------------------------------|
+| url              | String                                   | 模型加载地址                                                                                               |
+| position         | [number,number]                          | 3dtiles加载的经纬度位置，0.0.7版本开始可以不用传，默认从3dtiles数据中读取                                                       |
+| scale            | Number，{x:Number, y: Number, z: Number}  | 设置缩放比例                                                                                               |
+| rotation         | {x:Number, y: Number, z: Number}         | 旋转模型                                                                                                 |
+| translate        | {x:Number, y: Number, z: Number}         | 模型偏移设置                                                                                               |
+| dracoDecoderPath | String                                   | DRACOLoader 的decoder路径，默认使用CDN路径，默认：https://cdn.jsdelivr.net/npm/three@0.143/examples/js/libs/draco/ | 
+| fetchOptions     | Object                                   | 使用fetch下载文件的参数                                                                                       |
+| mouseEvent       | Boolean                                  | 是否开启事件,默认false                                                                                       |
+| debug            | Boolean                                  | 是否开启debug，开启后将会在页面最顶部显示当前模型处理情况， 默认 false                                                            |
 
 ###### 成员函数
 
