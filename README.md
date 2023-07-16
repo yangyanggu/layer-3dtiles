@@ -141,7 +141,7 @@ options: Layer3DTiles初始化参数，参数内容如下：
 | fetchOptions     | Object                                  | 使用fetch下载文件的参数                                                                                       |
 | mouseEvent       | Boolean                                 | 是否开启事件,默认false                                                                                       |
 | debug            | Boolean                                 | 是否开启debug，开启后将会在页面最顶部显示当前模型处理情况， 默认 false                                                            |
-| autoFocus        | Boolean                                 | 加载后是否自动将地图中心点移动到模型中心，仅在不传position时生效                                                                 |
+| autoFocus        | Boolean                                 | 加载后是否自动将地图中心点移动到模型中心，仅在不传position时生效，0.0.7支持                                                         |
 | configLoader     | (loader: GLTFLoader) => void            | 配置loader，用于添加draco等扩展 ,0.0.7支持                                                                       |
 
 ###### 成员函数
