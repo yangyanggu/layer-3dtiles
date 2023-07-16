@@ -14,7 +14,7 @@ interface Vec {
 
 interface Options {
   url: string //模型下载地址
-  position: number[] // 模型位置，经纬度
+  position?: number[] // 模型位置，经纬度
   rotation?: Vec // 旋转角度，一般不需要设置
   translate?: Vec // 偏移位置
   scale?: number | Vec // 模型缩放比例
@@ -22,6 +22,8 @@ interface Options {
   fetchOptions?: any // 使用fetch下载文件的参数
   mouseEvent?: boolean // 是否开启鼠标事件，包含点击、移动、双击、右击
   debug?: boolean // 是否开启debug模式，开启后将会再最上面显示当前模型加载情况
+  autoFocus?: boolean // 加载后是否自动将地图中心点移动到模型中心，仅在不传position时生效
+  configLoader?: (loader: GLTFLoader) => void // 配置loader，用于添加draco等扩展
 }
 
 class Layer3DTiles extends BaseEvent{
@@ -38,9 +40,11 @@ class Layer3DTiles extends BaseEvent{
   parentGroup: Group
   position?: number[]
   hasResetCenter = false
+  options: Options
 
   constructor(layer: any, options: Options) {
     super();
+    this.options = options;
     this.mouse = new Vector2()
     this.layer = layer;
     const tilesRenderer = new LayerTilesRenderer( options.url );
@@ -63,6 +67,9 @@ class Layer3DTiles extends BaseEvent{
     const dracoDecodePath = options.dracoDecoderPath || 'https://cdn.jsdelivr.net/npm/three@0.143/examples/js/libs/draco/'
     dRACOLoader.setDecoderPath(dracoDecodePath)
     gltfLoader.setDRACOLoader(dRACOLoader)
+    if (options.configLoader){
+      options.configLoader(gltfLoader)
+    }
     tilesRenderer.manager.addHandler(/\.gltf$/i, gltfLoader)
     tilesRenderer.onLoadTileSet = (tileSet) => {
       this.emit('loadTileSet', tileSet)
@@ -299,6 +306,9 @@ class Layer3DTiles extends BaseEvent{
       // 将中心点坐标转化为经纬度和海拔
       const result = convertToWGS84(center.x, center.y, center.z);
       const lnglat = gps84_To_Gcj02(result.longitude, result.latitude);
+      if(this.options.autoFocus){
+        this.layer.getMap().setCenter(lnglat)
+      }
       this.setPosition(lnglat);
       this.setTranslate({
         x:0,
@@ -314,7 +324,7 @@ class Layer3DTiles extends BaseEvent{
     this.layer.update()
     if(this.statsContainer){
       const tiles = this.tilesRenderer as any;
-      this.statsContainer.innerHTML = `正在下载: ${ tiles.stats.downloading } 正在编译: ${ tiles.stats.parsing } 已显示: ${ tiles.group.children.length - 2 }`;
+      this.statsContainer.innerHTML = `正在下载: ${ tiles.stats.downloading } 正在编译: ${ tiles.stats.parsing } 已显示: ${ tiles.group.children.length }`;
     }
   }
 

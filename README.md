@@ -130,17 +130,19 @@ layer.on('complete', () => {
 layer: ThreeLayer实例对象<br/>
 options: Layer3DTiles初始化参数，参数内容如下：
 
-| 属性名              | 属性类型                                     | 属性描述                                                                                                 |
-|------------------|------------------------------------------|------------------------------------------------------------------------------------------------------|
-| url              | String                                   | 模型加载地址                                                                                               |
-| position         | [number,number]                          | 3dtiles加载的经纬度位置，0.0.7版本开始可以不用传，默认从3dtiles数据中读取                                                       |
-| scale            | Number，{x:Number, y: Number, z: Number}  | 设置缩放比例                                                                                               |
-| rotation         | {x:Number, y: Number, z: Number}         | 旋转模型                                                                                                 |
-| translate        | {x:Number, y: Number, z: Number}         | 模型偏移设置                                                                                               |
-| dracoDecoderPath | String                                   | DRACOLoader 的decoder路径，默认使用CDN路径，默认：https://cdn.jsdelivr.net/npm/three@0.143/examples/js/libs/draco/ | 
-| fetchOptions     | Object                                   | 使用fetch下载文件的参数                                                                                       |
-| mouseEvent       | Boolean                                  | 是否开启事件,默认false                                                                                       |
-| debug            | Boolean                                  | 是否开启debug，开启后将会在页面最顶部显示当前模型处理情况， 默认 false                                                            |
+| 属性名              | 属性类型                                    | 属性描述                                                                                                 |
+|------------------|-----------------------------------------|------------------------------------------------------------------------------------------------------|
+| url              | String                                  | 模型加载地址                                                                                               |
+| position         | [number,number]                         | 3dtiles加载的经纬度位置，0.0.7版本开始可以不用传，默认从3dtiles数据中读取                                                       |
+| scale            | Number，{x:Number, y: Number, z: Number} | 设置缩放比例                                                                                               |
+| rotation         | {x:Number, y: Number, z: Number}        | 旋转模型                                                                                                 |
+| translate        | {x:Number, y: Number, z: Number}        | 模型偏移设置                                                                                               |
+| dracoDecoderPath | String                                  | DRACOLoader 的decoder路径，默认使用CDN路径，默认：https://cdn.jsdelivr.net/npm/three@0.143/examples/js/libs/draco/ | 
+| fetchOptions     | Object                                  | 使用fetch下载文件的参数                                                                                       |
+| mouseEvent       | Boolean                                 | 是否开启事件,默认false                                                                                       |
+| debug            | Boolean                                 | 是否开启debug，开启后将会在页面最顶部显示当前模型处理情况， 默认 false                                                            |
+| autoFocus        | Boolean                                 | 加载后是否自动将地图中心点移动到模型中心，仅在不传position时生效                                                                 |
+| configLoader     | (loader: GLTFLoader) => void            | 配置loader，用于添加draco等扩展 ,0.0.7支持                                                                       |
 
 ###### 成员函数
 
