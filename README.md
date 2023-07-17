@@ -9,14 +9,14 @@
 本项目为高德地图的3DTilesLayer图层插件，依赖`@vuemap/three-layer`插件，因此如果使用npm安装时需要安装`@vuemap/three-layer`
 
 > 当前坐标只支持box、region, 不支持sphere
-> 从0.0.7版本(当前为beta版)开始可以初始化可以不传position，不传时将默认从3dtiles数据中获取中心点和海拔
+> 从0.0.7版本开始可以初始化可以不传position，不传时将默认从3dtiles数据中获取中心点和海拔
 
 ### 示例
 [codepen示例](https://codepen.io/yangyanggu/pen/BaxGLVZ)
 
 ### 模型导出时注意事项
 * 当使用shp文件生成3dtiles时，参考坐标系需要根据shp文件的坐标系来设定，正常shp文件使用EPSG:4326坐标系，也就是WGS84
-* 只支持box、region包围
+* 只支持box、region包围盒
 
 ### 开发注意事项
 * 当加载3dtiles，需要关闭浏览器的开发者工具，不然在销毁3dtiles图层时会有部分显存无法释放

@@ -1,6 +1,6 @@
 {
   "name": "@vuemap/layer-3dtiles",
-  "version": "0.0.7-beta",
+  "version": "0.0.7",
   "description": "高德地图3DTiles加载插件",
   "keywords": [
     "amap",
