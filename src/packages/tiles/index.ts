@@ -305,16 +305,17 @@ class Layer3DTiles extends BaseEvent{
       box.getCenter(center);
       // 将中心点坐标转化为经纬度和海拔
       const result = convertToWGS84(center.x, center.y, center.z);
+      // console.log('result: ', result)
       const lnglat = gps84_To_Gcj02(result.longitude, result.latitude);
       if(this.options.autoFocus){
         this.layer.getMap().setCenter(lnglat)
       }
       this.setPosition(lnglat);
-      this.setTranslate({
+      /*this.setTranslate({
         x:0,
         y:0,
         z: result.height
-      })
+      })*/
     }
   }
 
