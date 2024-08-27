@@ -41,7 +41,7 @@
       // const center = [113.067878363716,22.644367393664]
       const map = new AMap.Map('app', {
         center: center,
-        zoom: 14,
+        zoom: 18,
         viewMode: '3D',
         showBuildingBlock: false,
         pitch: 35
@@ -70,7 +70,7 @@
         tiles = new AMap.Layer3DTiles(layer, {
           // url: './hutong/tileset.json', // shp生成的3dtiles
           // url: './tiles/tileset.json', // 倾斜摄影生成的3dtiles
-          url: 'http://localhost/bl-0715/tileset.json', // 倾斜摄影生成的3dtiles
+          url: 'https://myserver.guyixi.cn:10081/bl/tileset.json', // 倾斜摄影生成的3dtiles
           // url: 'http://localhost/3dtiles20230326/tileset.json', // region
           // url: 'http://localhost/region/tileset.json', // region
           // position: center,
@@ -82,6 +82,14 @@
           x:0,
           y:0,
           z:0
+        })
+        tiles.on('autoPosition', () => {
+          console.log('自动设置位置结束')
+          tiles.setTranslate({
+            x: 120,
+            y: 0,
+            z: 0
+          })
         })
         // tiles.setScale(1.5)
         /*tiles.on('click', (e ) => {

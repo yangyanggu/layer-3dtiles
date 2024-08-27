@@ -316,6 +316,7 @@ class Layer3DTiles extends BaseEvent{
         y:0,
         z: result.height
       })*/
+      this.emit('autoPosition')
     }
   }
 

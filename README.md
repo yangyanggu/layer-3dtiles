@@ -161,11 +161,12 @@ options: Layer3DTiles初始化参数，参数内容如下：
 
 ###### 事件列表
 
-| 事件名          | 参数                                         | 描述                                                            |
-|--------------|--------------------------------------------|---------------------------------------------------------------|
-| loadTileSet  | TileSet                                    | tileSet加载成功后触发                                                |
-| loadModel    | {scene, tile}                              | 加载模型后触发                                                       |
-| disposeModel | {scene, tile}                              | 销毁模型后触发                                                       |
+| 事件名          | 参数                                       | 描述                                                            |
+|--------------|------------------------------------------|---------------------------------------------------------------|
+| loadTileSet  | TileSet                                  | tileSet加载成功后触发                                                |
+| loadModel    | {scene, tile}                            | 加载模型后触发                                                       |
+| disposeModel | {scene, tile}                            | 销毁模型后触发                                                       |
 | click        | null, {object: Object3D,batchData: Object} | 点击事件，可能会出现null值,object为点击的模型，batchData为模型所在的扩展数据，通过读取父节点获取    |
 | mousemove    | null, {object: Object3D,batchData: Object} | 鼠标移动事件，可能会出现null值,object为滑动到的模型，batchData为模型所在的扩展数据，通过读取父节点获取 |
 | rightClick   | null, {object: Object3D,batchData: Object} | 右击事件，可能会出现null值,object为点击的模型，batchData为模型所在的扩展数据，通过读取父节点获取    |
+| autoPosition   | null | 自动设置position后触发，只有在初始化插件时不传入position，并且3dtiles中能够计算出中心点时生效    |
